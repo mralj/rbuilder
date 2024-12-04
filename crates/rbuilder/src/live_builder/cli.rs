@@ -11,6 +11,7 @@ use tokio_util::sync::CancellationToken;
 
 use crate::{
     building::builders::{BacktestSimulateBlockInput, Block},
+    ipc_db::{DatabaseMock, IpcProvider},
     live_builder::{
         base_config::load_config_toml_and_env, payload_events::MevBoostSlotDataGenerator,
     },
@@ -104,7 +105,10 @@ where
     )
     .await?;
     let provider = config.base_config().create_provider_factory()?;
-    let builder = config.new_builder(provider, cancel.clone()).await?;
+    let provider_ipc = IpcProvider();
+    let builder = config
+        .new_builder::<_, DatabaseMock>(provider_ipc, cancel.clone())
+        .await?;
 
     let ctrlc = tokio::spawn(async move {
         ctrl_c().await.unwrap_or_default();

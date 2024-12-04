@@ -2,6 +2,7 @@ pub mod backtest;
 pub mod beacon_api_client;
 pub mod building;
 pub mod integration;
+pub mod ipc_db;
 pub mod live_builder;
 pub mod mev_boost;
 pub mod primitives;
